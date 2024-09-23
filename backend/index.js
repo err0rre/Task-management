@@ -54,20 +54,49 @@ app.post('/api/tasks', async (req, res) => {
 // 3. 更新任务状态
 app.put('/api/tasks/:id', async (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
+  const { title, status } = req.body;
+
+  // 确保打印接收到的 title 和 status
+  console.log(`Received PUT request to update task with ID: ${id}`);
+  console.log(`Title received: ${title}, Status received: ${status}`);
+
   try {
     const task = await Task.findByPk(id);
     if (task) {
-      task.status = status;
-      await task.save();
-      res.json(task);
+      console.log(`Current task title: ${task.title}, Current task status: ${task.status}`);
+
+      // 检查是否真正接收到更新的 title 值
+      if (task.title !== title) {
+        console.log(`Updating title from "${task.title}" to "${title}"`);
+      }
+
+      if (task.status !== status) {
+        console.log(`Updating status from "${task.status}" to "${status}"`);
+      }
+
+      task.title = title;  // 设置 title
+      task.status = status;  // 设置 status
+
+      // 强制保存 title 和 status 字段
+      await task.save({ fields: ['title', 'status'] });
+
+      // 打印保存后的任务
+      console.log('Task successfully saved to database:', task);
+      res.json(task);  // 返回更新后的任务
     } else {
       res.status(404).json({ error: 'Task not found' });
     }
   } catch (error) {
+    console.error('Error updating task:', error);
     res.status(500).json({ error: 'Error updating task' });
   }
 });
+
+
+
+
+
+
 
 // 4. 删除任务
 app.delete('/api/tasks/:id', async (req, res) => {
