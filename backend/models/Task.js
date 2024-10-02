@@ -9,8 +9,18 @@ const Task = sequelize.define('Task', {
   },
   status: {
     type: DataTypes.STRING,
-    allowNull: false,
+    defaultValue: 'pending',
   },
+  priority: {
+    type: DataTypes.INTEGER,  // 1高, 2中, 3低
+    allowNull: true, 
+  },
+  dueDate: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
+}, {
+  timestamps: true,  // 启用 Sequelize 自动时间戳 (createdAt, updatedAt)
 });
 
 // 强制同步数据库表（如果需要重建表，可以设置 force: true）
@@ -21,5 +31,10 @@ Task.sync({ force: false })  // 确保此处设置 force: false，避免重建�
   .catch((err) => {
     console.error('Error creating table:', err);
   });
+
+// 任务属于一个用户
+Task.belongsTo(User, { foreignKey: 'user_id' });
+User.hasMany(Task, { foreignKey: 'user_id' });
+
 
 module.exports = Task;

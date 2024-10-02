@@ -2,6 +2,7 @@
 const express = require('express');
 const cors = require('cors');
 const Task = require('./models/Task');  // 导入 Task 模型
+const User = require('./models/User');
 
 const app = express();
 
@@ -18,69 +19,63 @@ app.get('/', (req, res) => {
 
 // 1. 获取所有任务
 app.get('/api/tasks', async (req, res) => {
-    try {
-      const tasks = await Task.findAll();  // 尝试从数据库中获取任务
-      res.json(tasks);  // 如果成功，返回任务列表
-    } catch (error) {
-      console.error('Error fetching tasks:', error.message);  // 在服务器日志中输出错误
-      res.status(500).json({ error: 'Error fetching tasks' });  // 返回错误响应给客户端
-    }
-  });
+  try {
+    const tasks = await Task.findAll();  // 获取所有任务
+    res.json(tasks);  // 返回包含新字段的任务列表
+  } catch (error) {
+    console.error('Error fetching tasks:', error.message);  // 输出错误
+    res.status(500).json({ error: 'Error fetching tasks' });  // 返回错误响应
+  }
+});
+
   
   
 
 // 2. 创建新任务
 app.post('/api/tasks', async (req, res) => {
-    try {
-      console.log(req.body);  // 输出请求体内容，便于调试
-      const { title, status } = req.body;
-  
-      if (!title || !status) {
-        throw new Error('Task title and status are required');
-      }
-  
-      // 创建任务
-      const newTask = await Task.create({ title, status });
-  
-      res.status(201).json(newTask);
-    } catch (error) {
-      console.error('Error creating task:', error);
-      res.status(500).json({ error: error.message });
+  const { title, status, priority, dueDate } = req.body;  // 接收前端的字段
+  try {
+    console.log(req.body);  // 输出请求体内容，便于调试
+
+    if (!title || !status) {
+      throw new Error('Task title and status are required');
     }
-  });
+
+    // 创建任务，包括新字段 priority 和 dueDate
+    const newTask = await Task.create({ title, status, priority, dueDate });
+
+    res.status(201).json(newTask);  // 返回新创建的任务
+  } catch (error) {
+    console.error('Error creating task:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
   
   
 
 // 3. 更新任务状态
 app.put('/api/tasks/:id', async (req, res) => {
   const { id } = req.params;
-  const { title, status } = req.body;
+  const { title, status, priority, dueDate } = req.body;  // 新增 priority 和 dueDate
 
-  // 确保打印接收到的 title 和 status
   console.log(`Received PUT request to update task with ID: ${id}`);
-  console.log(`Title received: ${title}, Status received: ${status}`);
+  console.log(`Title received: ${title}, Status received: ${status}, Priority: ${priority}, DueDate: ${dueDate}`);
 
   try {
     const task = await Task.findByPk(id);
     if (task) {
+      // 打印当前任务信息
       console.log(`Current task title: ${task.title}, Current task status: ${task.status}`);
 
-      // 检查是否真正接收到更新的 title 值
-      if (task.title !== title) {
-        console.log(`Updating title from "${task.title}" to "${title}"`);
-      }
+      // 更新任务的 title、status、priority、dueDate
+      task.title = title;
+      task.status = status;
+      task.priority = priority;
+      task.dueDate = dueDate;
 
-      if (task.status !== status) {
-        console.log(`Updating status from "${task.status}" to "${status}"`);
-      }
+      await task.save();  // 保存修改
 
-      task.title = title;  // 设置 title
-      task.status = status;  // 设置 status
-
-      // 强制保存 title 和 status 字段
-      await task.save({ fields: ['title', 'status'] });
-
-      // 打印保存后的任务
       console.log('Task successfully saved to database:', task);
       res.json(task);  // 返回更新后的任务
     } else {
