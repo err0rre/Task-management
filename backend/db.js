@@ -1,3 +1,4 @@
+//
 const { Sequelize } = require('sequelize');
 
 // 创建 Sequelize 实例并连接到 PostgreSQL 数据库!!!!!!将 'task_manager' 替换为你创建的数据库名称，'postgres' 和 'password' 分别是你的数据库用户名和密码。
