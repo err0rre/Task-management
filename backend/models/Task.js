@@ -1,5 +1,7 @@
+//models/Task.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
+const User = require('./User');
 
 // 定义任务模型
 const Task = sequelize.define('Task', {
@@ -19,22 +21,20 @@ const Task = sequelize.define('Task', {
     type: DataTypes.DATE,
     allowNull: true,
   },
+  userId: {  // 外键
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Users',
+      key: 'id'
+    }
+  }
 }, {
   timestamps: true,  // 启用 Sequelize 自动时间戳 (createdAt, updatedAt)
 });
 
-// 强制同步数据库表（如果需要重建表，可以设置 force: true）
-Task.sync({ force: false })  // 确保此处设置 force: false，避免重建表
-  .then(() => {
-    console.log('Task table created successfully.');
-  })
-  .catch((err) => {
-    console.error('Error creating table:', err);
-  });
-
-// 任务属于一个用户
-Task.belongsTo(User, { foreignKey: 'user_id' });
-User.hasMany(Task, { foreignKey: 'user_id' });
-
+// 建立 Task 和 User 之间的关联
+Task.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Task, { foreignKey: 'userId' });
 
 module.exports = Task;
