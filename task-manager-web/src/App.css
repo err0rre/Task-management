@@ -1,0 +1,431 @@
+/* 全局样式 */
+.App {
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f7f9fc; /* 页面背景色 */
+  padding: 20px;
+}
+
+/* Header 样式 */
+.App-header {
+  background-color: #282c34;
+  width: 100%;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;  /* 使右上角的用户名和按钮定位 */
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;  /* 限制最大宽度 */
+}
+
+.app-title {
+  font-size: 24px;
+  margin: 0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: absolute;
+  right: 20px;
+}
+
+.username {
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.logout-button {
+  padding: 10px 20px;
+  background-color: #ff6666;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.logout-button:hover {
+  background-color: #ff4d4d;
+}
+
+
+/* 任务列表样式 ============================ */
+/* 主容器 */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  width: 90vw;
+  margin: 0 auto; /* 居中 */
+}
+
+/* 任务列表 */
+.task-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --high-priority-color: #dc3545;
+  --medium-priority-color: #ffc107;
+  --low-priority-color: #28a745;
+  --button-bg-color: #d4e5f1;
+  --button-border-color: #007bff;
+  --button-text-color: #007bff;
+}
+
+/* 任务列表项 */
+li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* 左侧颜色条 */
+.priority-high {
+  border-left: 5px solid var(--high-priority-color);
+}
+
+.priority-medium {
+  border-left: 5px solid var(--medium-priority-color);
+}
+
+.priority-low {
+  border-left: 5px solid var(--low-priority-color);
+}
+
+/* 日期样式 */
+.task-date {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin-right: 10px;
+  width: 80px;
+  flex-shrink: 0;
+}
+
+/* 任务信息 */
+.task-info {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+
+/* 任务标题 */
+.task-title {
+  flex-grow: 1;
+}
+
+/* 优先级图标 */
+.task-priority-icon {
+  width: 0;
+  height: 0;
+  border-top: 20px solid; /* 大小 */
+  border-right: 20px solid transparent;
+  position: relative;
+  margin-right: 10px;
+}
+
+/* 根据优先级设置图标颜色 */
+.priority-high .task-priority-icon {
+  border-top-color: var(--high-priority-color);
+}
+
+.priority-medium .task-priority-icon {
+  border-top-color: var(--medium-priority-color);
+}
+
+.priority-low .task-priority-icon {
+  border-top-color: var(--low-priority-color);
+}
+
+/* 按钮容器 */
+.task-buttons {
+  display: flex;
+}
+
+/* 按钮样式 */
+li button {
+  padding: 8px 12px;
+  background-color: var(--button-bg-color);
+  border: 1px solid var(--button-border-color);
+  color: var(--button-text-color);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+/* 第一个按钮的左圆角 */
+.task-buttons button:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+/* 最后一个按钮的右圆角 */
+.task-buttons button:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+/* 移除按钮之间的左边框 */
+.task-buttons button + button {
+  border-left: none;
+}
+
+/* 按钮悬停效果 */
+li button:hover {
+  background-color: var(--button-border-color);
+  color: white;
+}
+
+/* 列表项悬停效果 */
+li:hover {
+  background-color: #f9f9f9;
+}
+
+/* 已完成任务的透明度 */
+.completed li {
+  opacity: 0.7;
+}
+
+
+
+
+
+/* 弹窗的背景遮罩层 */
+.modal {
+  position: fixed; /* 固定定位，使其相对于视口定位 */
+  z-index: 1000; /* 确保弹窗位于其他元素之上 */
+  left: 0;
+  top: 0;
+  width: 100%; /* 占满整个视口宽度 */
+  height: 100%; /* 占满整个视口高度 */
+  overflow: auto; /* 如果内容超出视口，允许滚动 */
+  background-color: rgba(0, 0, 0, 0.5); /* 半透明的黑色背景 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 弹窗内容区域 */
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px 30px;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* 弹窗表单样式 */
+.modal-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 表单组样式 */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+/* 表单标签样式 */
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* 输入字段和选择框样式 */
+.form-group input,
+.form-group select {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* 弹窗按钮容器 */
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 弹窗按钮样式 */
+.modal-buttons button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.modal-buttons button:hover {
+  background-color: #0056b3;
+}
+
+/* 取消按钮的特殊样式 */
+.modal-buttons button:nth-child(2) {
+  background-color: #6c757d;
+}
+
+.modal-buttons button:nth-child(2):hover {
+  background-color: #5a6268;
+}
+
+
+
+
+/* --------- Login ------------------------*/
+/* 登录页面容器样式 */
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* 输入框样式 */
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+/* 按钮样式 */
+.btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+.toggle-btn {
+  background: none;
+  color: #007bff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.toggle-btn:hover {
+  text-decoration: underline;
+}
+
+/* 错误信息样式 */
+.error-message {
+  color: red;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+
+/* create new task */
+/* 表单行，横向排列输入字段 */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+/* 表单组 */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 标题组，设置较宽的宽度 */
+.title-group {
+  flex: 4; /* 占据双倍空间 */
+  min-width: 240px;
+}
+
+/* 小型输入组 */
+.small-group {
+  flex: 1; /* 占据标准空间 */
+  min-width: 100px;
+}
+
+/* 按钮组 */
+.button-group {
+  flex: 0; /* 仅占自身内容的空间 */
+}
+
+/* 标签样式 */
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* 输入框和选择框样式 */
+.form-group input,
+.form-group select {
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* 创建按钮样式 */
+.button-group button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #28a745; /* 绿色 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button-group button:hover {
+  background-color: #218838;
+}
+
+/* 响应式调整 */
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .title-group,
+  .small-group,
+  .button-group {
+    width: 100%;
+  }
+}
