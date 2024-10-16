@@ -64,21 +64,6 @@
 }
 
 
-/* 任务列表样式 ============================ */
-/* 主容器 */
-.main-container {
-  display: flex;
-  flex-direction: column;
-  width: 90vw;
-  margin: 0 auto; /* 居中 */
-}
-
-/* 任务列表 */
-.task-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
 
 :root {
   --high-priority-color: #dc3545;
@@ -89,118 +74,204 @@
   --button-text-color: #007bff;
 }
 
-/* 任务列表项 */
-li {
+/* 主容器 */
+.main-container {
   display: flex;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #ccc;
+  flex-direction: column;
+  width: 80vw;
+  margin: 0 auto; /* 居中 */
+  padding: 20px;
+  
 }
 
-/* 左侧颜色条 */
+/* 表单样式 */
+.create-task {
+  margin-bottom: 30px;
+}
+
+.create-task-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.create-task-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+#new-task-title {
+  width: 35vw;
+}
+
+#new-task-priority, 
+#new-task-due-date {
+  width: 15vw;
+}
+
+
+.create-task-form input,
+.create-task-form select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.create-task-form button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.create-task-form button:hover {
+  background-color: #218838;
+}
+
+/* 筛选容器 */
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filter-container select,
+.filter-container input {
+  width: 30vw;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+
+/* 列表项悬停效果 */
+.task-list li:hover {
+  background-color: #f0f8ff;
+}
+
+
+
+
+
+/* li 的优先级颜色条 */
+.task-item.priority-high {
+  border-left: 10px solid var(--high-priority-color); /* 使用预设的高优先级颜色 */
+}
+
+.task-item.priority-medium {
+  border-left: 10px solid var(--medium-priority-color); /* 使用预设的中优先级颜色 */
+}
+
+.task-item.priority-low {
+  border-left: 10px solid var(--low-priority-color); /* 使用预设的低优先级颜色 */
+}
+
+
+
+/* li 的优先级颜色条 */
 .priority-high {
-  border-left: 5px solid var(--high-priority-color);
+  border-left: 10px solid var(--high-priority-color); /* 边框颜色条 */
 }
 
 .priority-medium {
-  border-left: 5px solid var(--medium-priority-color);
+  border-left: 10px solid var(--medium-priority-color); /* 边框颜色条 */
 }
 
 .priority-low {
-  border-left: 5px solid var(--low-priority-color);
+  border-left: 10px solid var(--low-priority-color); /* 边框颜色条 */
 }
 
-/* 日期样式 */
-.task-date {
-  color: #6c757d;
-  font-size: 0.9rem;
-  margin-right: 10px;
-  width: 80px;
-  flex-shrink: 0;
-}
-
-/* 任务信息 */
-.task-info {
+/* 任务项布局 */
+.task-item {
   display: flex;
   align-items: center;
-  flex-grow: 1;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: background-color 0.3s;
 }
 
-/* 任务标题 */
+.task-item:hover {
+  background-color: #f0f8ff;
+}
+
 .task-title {
   flex-grow: 1;
+  margin-left: 10px;
 }
 
-/* 优先级图标 */
-.task-priority-icon {
-  width: 0;
-  height: 0;
-  border-top: 20px solid; /* 大小 */
-  border-right: 20px solid transparent;
-  position: relative;
-  margin-right: 10px;
-}
-
-/* 根据优先级设置图标颜色 */
-.priority-high .task-priority-icon {
-  border-top-color: var(--high-priority-color);
-}
-
-.priority-medium .task-priority-icon {
-  border-top-color: var(--medium-priority-color);
-}
-
-.priority-low .task-priority-icon {
-  border-top-color: var(--low-priority-color);
-}
-
-/* 按钮容器 */
 .task-buttons {
   display: flex;
+  gap: 10px;
 }
 
 /* 按钮样式 */
 li button {
-  padding: 8px 12px;
-  background-color: var(--button-bg-color);
+  padding: 5px 10px;
   border: 1px solid var(--button-border-color);
+  background-color: white;
   color: var(--button-text-color);
-  border-radius: 0;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-/* 第一个按钮的左圆角 */
-.task-buttons button:first-child {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-
-/* 最后一个按钮的右圆角 */
-.task-buttons button:last-child {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-/* 移除按钮之间的左边框 */
-.task-buttons button + button {
-  border-left: none;
-}
-
-/* 按钮悬停效果 */
 li button:hover {
   background-color: var(--button-border-color);
   color: white;
 }
 
-/* 列表项悬停效果 */
-li:hover {
+
+
+
+/* 任务列表样式 */
+.task-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.task-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
   background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+
+
+
+.task-buttons button:hover {
+  background-color: var(--button-border-color);
+  color: white;
 }
 
 /* 已完成任务的透明度 */
 .completed li {
   opacity: 0.7;
 }
+
+
+
+
+h3 {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
 
 
 
