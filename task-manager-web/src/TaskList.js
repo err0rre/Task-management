@@ -28,7 +28,7 @@ function TaskList() {
       return;
     }
   
-    axios.get('http://localhost:4000/api/tasks', {
+    axios.get('http://34.41.207.44:4000/api/tasks', {
       headers: {
         'Authorization': `Bearer ${token}`  // Include JWT token in request header
       }
@@ -62,7 +62,7 @@ function TaskList() {
       setError('Please log in to add tasks.');
       return;
     }
-    axios.post('http://localhost:4000/api/tasks', { 
+    axios.post('http://34.41.207.44:4000/api/tasks', { 
       title: newTask, 
       status: 'pending', 
       priority: newPriority, 
@@ -97,7 +97,7 @@ function TaskList() {
   // Submit edit
   const handleUpdateTask = () => {
     if (editingTask) {
-      axios.put(`http://localhost:4000/api/tasks/${editingTask.id}`, {
+      axios.put(`http://34.41.207.44:4000/api/tasks/${editingTask.id}`, {
         title: editedTaskTitle,
         status: editedTaskStatus,
         priority: editedTaskPriority,
@@ -123,7 +123,7 @@ function TaskList() {
 
   // Delete task
   const handleDeleteTask = (id) => {
-    axios.delete(`http://localhost:4000/api/tasks/${id}`, {
+    axios.delete(`http://34.41.207.44:4000/api/tasks/${id}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

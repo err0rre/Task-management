@@ -32,15 +32,15 @@ spec:
           value: "task_manager"
         - name: JWT_SECRET
           value: "your_jwt_secret_key"
-        livenessProbe:           # 添加 livenessProbe
+        livenessProbe:
           httpGet:
-            path: /health        # backend 应暴露的健康检查路径
-            port: 4000           # 使用后端的服务端口
-          initialDelaySeconds: 10 # 容器启动后延迟多少秒进行健康检查
-          periodSeconds: 10       # 每隔多少秒检查一次
-        readinessProbe:          # 添加 readinessProbe
+            path: /health
+            port: 4000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
           httpGet:
-            path: /ready         # backend 应暴露的就绪检查路径
+            path: /ready
             port: 4000
           initialDelaySeconds: 5
           periodSeconds: 5
@@ -51,6 +51,7 @@ metadata:
   name: backend-service
 spec:
   type: LoadBalancer
+  loadBalancerIP: 34.41.207.44
   ports:
     - port: 4000
       targetPort: 4000

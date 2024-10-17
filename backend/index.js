@@ -18,7 +18,9 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // const SECRET_KEY = 'my_jwt_secret_key';  // Secret key for signing JWTs
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use(express.json());
 
 /// 健康检查端点
@@ -36,11 +38,7 @@ app.get('/ready', async (req, res) => {
   }
 });
 
-// 其他路由和中间件
 
-app.listen(4000, () => {
-  console.log('Backend server running on port 4000');
-});
 
 
 

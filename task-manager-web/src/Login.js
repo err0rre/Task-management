@@ -24,7 +24,7 @@ function Login({ onLogin }) {
     }
     
     setLoading(true);  // Start loading
-    axios.post('http://localhost:4000/api/login', { username, password })
+    axios.post('http://34.41.207.44:4000/api/login', { username, password })
       .then(response => {
         const token = response.data.token;
         localStorage.setItem('token', token);  // Store token in localStorage
@@ -56,7 +56,7 @@ function Login({ onLogin }) {
     }
 
     setLoading(true);  // Start loading
-    axios.post('http://localhost:4000/api/register', { username, password, email })
+    axios.post('http://34.41.207.44:4000/api/register', { username, password, email })
       .then(() => {
         setIsRegistering(false);  // Switch back to login page after successful registration
         setError('');  // Clear error message
