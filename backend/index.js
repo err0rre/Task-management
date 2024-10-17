@@ -12,7 +12,8 @@ const sequelize = require('./db');  // Import the Sequelize instance
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-const SECRET_KEY = process.env.SECRET_KEY;
+// const SECRET_KEY = process.env.SECRET_KEY;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // const SECRET_KEY = 'my_jwt_secret_key';  // Secret key for signing JWTs
 

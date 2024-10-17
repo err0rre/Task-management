@@ -17,6 +17,21 @@ spec:
         image: gcr.io/infs3208-431003/backend
         ports:
         - containerPort: 4000
+        env: 
+        - name: PORT
+          value: "4000"
+        - name: DB_HOST
+          value: "db"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_USER
+          value: "tailor"
+        - name: DB_PASSWORD
+          value: "password"
+        - name: DB_NAME
+          value: "task_manager"
+        - name: JWT_SECRET
+          value: "your_jwt_secret_key"
         livenessProbe:           # 添加 livenessProbe
           httpGet:
             path: /health        # backend 应暴露的健康检查路径
