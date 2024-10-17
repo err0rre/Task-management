@@ -1,43 +1,37 @@
-/* 全局样式 */
+/* Global Styles */
 :root {
   --primary-font: 'DM Sans', sans-serif;
   --secondary-font: 'Dosis', sans-serif;
 
-
-  --header-color: #53616c; /* 深蓝灰头部颜色 */
-  --primary-color: #3a4f5a; /* 主按钮颜色 */
-  --primary-hover-color: #778891; /* 主按钮悬停颜色 */
-  --secondary-color: #b0b8bd; /* 次按钮颜色 */
-  --secondary-hover-color: #969fa4; /* 次按钮悬停效果 */
-  --danger-color: #977070; /* 柔和的玫瑰棕，高优先级 */
-  --warning-color: #bb9d82; /* 柔和的沙滩米色，中等优先级 */
-  --success-color: #7d9d83; /* 柔和的浅蓝绿色，低优先级 */
+  --header-color: #53616c;
+  --primary-color: #3a4f5a;
+  --primary-hover-color: #778891;
+  --secondary-color: #b0b8bd;
+  --secondary-hover-color: #969fa4;
+  --danger-color: #977070;
+  --warning-color: #bb9d82;
+  --success-color: #7d9d83;
   --success-hover-color: #5c737f;
-  --logout-color: #a49ba1; /* 柔和的烟灰紫，登出按钮 */
-  --logout-hover-color: #867b82; /* 烟灰紫的深色悬停效果 */
-  --background-color: #ebeff1; /* 淡淡的蓝灰背景 */
-  --task-bg-color: #f5f6f7; /* 米白中带灰的任务背景 */
-  --border-color: #ccd4d8; /* 蓝灰调的边框 */
-  --box-shadow-color: rgba(0, 0, 0, 0.05); /* 轻微阴影效果 */
-  --text-color: #f8fbff; /* 浅色文字 */
-  
-  --hover-bg-color: #f0f8ff; /* 列表项悬停背景色 */
-  --modal-bg-color: rgba(0, 0, 0, 0.5); /* 模态框的背景遮罩颜色 */
-  --button-bg-white: #e3e7ef; /* 按钮默认背景 */
-  --button-hover-text: #ffffff; /* 按钮悬停时的文字颜色 */
+  --logout-color: #a49ba1;
+  --logout-hover-color: #867b82;
+  --background-color: #ebeff1;
+  --task-bg-color: #f5f6f7;
+  --border-color: #ccd4d8;
+  --box-shadow-color: rgba(0, 0, 0, 0.05);
+  --text-color: #f8fbff;
+
+  --hover-bg-color: #f0f8ff;
+  --modal-bg-color: rgba(0, 0, 0, 0.5);
+  --button-bg-white: #e3e7ef;
+  --button-hover-text: #ffffff;
 }
 
-/* 全局应用字体 */
+/* Global font application */
 body {
-  font-family: var(--primary-font); /* 全局默认使用 DM Sans */
+  font-family: var(--primary-font); /* Global default is DM Sans */
 }
 
-
-
-
-
-
-/* 页面结构和布局 */
+/* Page structure and layout */
 .App {
   text-align: center;
   min-height: 100vh;
@@ -101,7 +95,7 @@ body {
   background-color: var(--logout-hover-color);
 }
 
-/* 任务创建样式 */
+/* Task creation styles */
 .main-container {
   display: flex;
   flex-direction: column;
@@ -154,12 +148,11 @@ body {
   font-size: 2.5vh;
 }
 
-
 .create-task-form button:hover {
   background-color: var(--success-hover-color);
 }
 
-/* 筛选容器 */
+/* Filter container */
 .filter-container {
   display: flex;
   justify-content: space-between;
@@ -176,7 +169,7 @@ body {
   border: 1px solid var(--border-color);
 }
 
-/* 列表样式 */
+/* List styles */
 .task-list {
   list-style-type: none;
   padding: 0;
@@ -194,15 +187,15 @@ body {
 }
 
 .task-item.priority-high {
-  border-left: 10px solid var(--danger-color); /* 高优先级颜色 */
+  border-left: 10px solid var(--danger-color); /* High priority color */
 }
 
 .task-item.priority-medium {
-  border-left: 10px solid var(--warning-color); /* 中等优先级颜色 */
+  border-left: 10px solid var(--warning-color); /* Medium priority color */
 }
 
 .task-item.priority-low {
-  border-left: 10px solid var(--success-color); /* 低优先级颜色 */
+  border-left: 10px solid var(--success-color); /* Low priority color */
 }
 
 .task-item:hover {
@@ -238,12 +231,7 @@ body {
   margin-top: 5px;
 }
 
-
-
-
-
-
-/* 按钮样式 */
+/* Button styles */
 li button {
   padding: 5px 10px;
   border: 1px solid var(--border-color);
@@ -259,13 +247,12 @@ li button:hover {
   color: var(--button-hover-text);
 }
 
-
-/* 已完成任务的透明度 */
+/* Completed task opacity */
 .completed li {
   opacity: 0.7;
 }
 
-/* 模态框样式 */
+/* Modal styles */
 .modal {
   position: fixed;
   z-index: 1000;
@@ -341,7 +328,7 @@ li button:hover {
   background-color: var(--secondary-hover-color);
 }
 
-/* 登录页面样式 */
+/* Login page styles */
 .login-container {
   max-width: 400px;
   margin: 0 auto;
@@ -395,7 +382,7 @@ li button:hover {
   font-weight: bold;
 }
 
-/* 响应式调整 */
+/* Responsive adjustments */
 @media (max-width: 600px) {
   .form-row {
     flex-direction: column;
@@ -408,3 +395,4 @@ li button:hover {
     width: 100%;
   }
 }
+

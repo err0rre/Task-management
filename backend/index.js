@@ -5,67 +5,64 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 // const bcrypt = require('bcryptjs');
-const Task = require('./models/Task');  // 导入 Task 模型
-const User = require('./models/User');  // 导入 User 模型
+const Task = require('./models/Task');  // Import the Task model
+const User = require('./models/User');  // Import the User model
 
-const sequelize = require('./db');  // 导入 Sequelize 实例
+const sequelize = require('./db');  // Import the Sequelize instance
 
 const app = express();
-const SECRET_KEY = 'my_jwt_secret_key';  // 用于签发 JWT 的密钥
+const SECRET_KEY = 'my_jwt_secret_key';  // Secret key for signing JWTs
 
-
-// 中间件
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// 获取所有用户
+// Get all users
 app.get('/api/users', async (req, res) => {
   try {
-    const users = await User.findAll();  // 从数据库获取所有用户
-    res.json(users);  // 返回用户列表
+    const users = await User.findAll();  // Fetch all users from the database
+    res.json(users);  // Return the user list
   } catch (error) {
     console.error('Error fetching users:', error.message);
     res.status(500).json({ error: 'Error fetching users' });
   }
 });
 
-// 获取单个用户
+// Get a single user
 app.get('/api/users/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await User.findByPk(id);  // 根据 ID 查找用户
+    const user = await User.findByPk(id);  // Find user by ID
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.json(user);  // 返回用户信息
+    res.json(user);  // Return the user information
   } catch (error) {
     console.error('Error fetching user:', error.message);
     res.status(500).json({ error: 'Error fetching user' });
   }
 });
 
-
-
-// 用户注册 API
+// User registration API
 app.post('/api/register', async (req, res) => {
   const { username, password, email } = req.body;
 
-  // 检查是否有字段为空
+  // Check if any fields are empty
   if (!username || !password || !email) {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
   try {
-    // 检查用户名或邮箱是否已存在
+    // Check if username or email already exists
     const existingUser = await User.findOne({ where: { username } });
     const existingEmail = await User.findOne({ where: { email } });
 
-    // 如果用户名或邮箱已存在，返回通用错误信息
+    // If username or email exists, return a general error message
     if (existingUser || existingEmail) {
       return res.status(400).json({ error: 'Username or email already exists' });
     }
 
-    // 创建新用户
+    // Create a new user
     const user = await User.create({ username, password, email });
 
     res.status(201).json({ message: 'User registered successfully' });
@@ -75,64 +72,56 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-
-
-
-// 用户登录
+// User login
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  
+
   try {
     const user = await User.findOne({ where: { username } });
     if (!user || password !== user.password) {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
 
-    // 生成 JWT 令牌
+    // Generate JWT token
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || 'your_jwt_secret', { expiresIn: '1h' });
-    return res.json({ token });  // 返回 token 给客户端
+    return res.json({ token });  // Return the token to the client
   } catch (error) {
     return res.status(500).json({ error: 'Login failed' });
   }
 });
 
-
-
-
-// 验证 JWT 中间件
+// JWT authentication middleware
 const authenticate = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) {
     return res.status(401).json({ error: 'No token provided' });
   }
 
-  // 获取 Bearer 后的 token 部分
+  // Extract the token part after Bearer
   const token = authHeader.split(' ')[1];
   if (!token) {
     return res.status(401).json({ error: 'No token provided' });
   }
 
-  // 验证 JWT 令牌
+  // Verify the JWT token
   jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret', (err, decoded) => {
     if (err) {
       return res.status(401).json({ error: 'Failed to authenticate token' });
     }
-    req.userId = decoded.userId;  // 将用户 ID 存储到请求对象中
+    req.userId = decoded.userId;  // Store the user ID in the request object
     next();
   });
 };
 
-
-
-// 根路径，处理 '/'
+// Root path handling '/'
 app.get('/', (req, res) => {
   res.send('Welcome to the Task Manager API! Try visiting /api/tasks to see the tasks.');
 });
 
-// 1. 获取所有任务（只返回当前用户的任务）
+// 1. Get all tasks (only return tasks for the current user)
 app.get('/api/tasks', authenticate, async (req, res) => {
   try {
-    const tasks = await Task.findAll({ where: { userId: req.userId } });  // 获取当前用户的任务
+    const tasks = await Task.findAll({ where: { userId: req.userId } });  // Get tasks for the current user
     res.json(tasks);
   } catch (error) {
     console.error('Error fetching tasks:', error.message);
@@ -140,20 +129,20 @@ app.get('/api/tasks', authenticate, async (req, res) => {
   }
 });
 
-// 2. 创建新任务
+// 2. Create a new task
 app.post('/api/tasks', authenticate, async (req, res) => {
   const { title, status, priority, dueDate } = req.body;
-  console.log('Creating task for user:', req.userId);  // 打印当前用户 ID
-  
+  console.log('Creating task for user:', req.userId);  // Log the current user ID
+
   try {
     if (!title || !status) {
       return res.status(400).json({ error: 'Task title and status are required' });
     }
 
-    // 创建任务，并将其与当前用户关联
+    // Create a task and associate it with the current user
     const newTask = await Task.create({ title, status, priority, dueDate, userId: req.userId });
 
-    console.log('Task created:', newTask);  // 打印新创建的任务
+    console.log('Task created:', newTask);  // Log the newly created task
     res.status(201).json(newTask);
   } catch (error) {
     console.error('Error creating task:', error);
@@ -161,38 +150,37 @@ app.post('/api/tasks', authenticate, async (req, res) => {
   }
 });
 
-
-// 3. 更新任务
+// 3. Update a task
 app.put('/api/tasks/:id', authenticate, async (req, res) => {
   const { id } = req.params;
   const { title, status, priority, dueDate } = req.body;
 
   try {
-    const task = await Task.findOne({ where: { id, userId: req.userId } });  // 确保只能更新自己的任务
+    const task = await Task.findOne({ where: { id, userId: req.userId } });  // Ensure only the user's own task can be updated
     if (!task) {
       return res.status(404).json({ error: 'Task not found' });
     }
 
-    // 更新任务
+    // Update the task
     task.title = title;
     task.status = status;
     task.priority = priority;
     task.dueDate = dueDate;
 
-    await task.save();  // 保存修改
+    await task.save();  // Save the changes
 
-    res.json(task);  // 返回更新后的任务
+    res.json(task);  // Return the updated task
   } catch (error) {
     console.error('Error updating task:', error);
     res.status(500).json({ error: 'Error updating task' });
   }
 });
 
-// 4. 删除任务
+// 4. Delete a task
 app.delete('/api/tasks/:id', authenticate, async (req, res) => {
   const { id } = req.params;
   try {
-    const task = await Task.findOne({ where: { id, userId: req.userId } });  // 确保只能删除自己的任务
+    const task = await Task.findOne({ where: { id, userId: req.userId } });  // Ensure only the user's own task can be deleted
     if (!task) {
       return res.status(404).json({ error: 'Task not found' });
     }
@@ -204,8 +192,8 @@ app.delete('/api/tasks/:id', authenticate, async (req, res) => {
   }
 });
 
-// 同步数据库模型并启动服务器
-sequelize.sync({ alter: true })  // 确保数据库表结构被更新而不会删除已有数据
+// Sync database models and start the server
+sequelize.sync({ alter: true })  // Ensure the database table structure is updated without dropping existing data
   .then(() => {
     const PORT = process.env.PORT || 4000;
     app.listen(PORT, () => {

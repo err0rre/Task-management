@@ -1,49 +1,49 @@
 //src/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import './App.css';  // 引入自定义的 CSS 文件
+import './App.css';  // Import custom CSS file
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');  // 注册时使用的 email
-  const [isRegistering, setIsRegistering] = useState(false);  // 用来切换登录和注册
+  const [email, setEmail] = useState('');  // Email used during registration
+  const [isRegistering, setIsRegistering] = useState(false);  // Toggle between login and registration
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);  // 添加加载状态
+  const [loading, setLoading] = useState(false);  // Add loading state
 
   // Helper function to validate email format
   const isValidEmail = (email) => {
-    return email.includes('@');  // 仅检查是否包含 @ 符号
+    return email.includes('@');  // Only checks if '@' is included
   };
 
-  // 处理登录
+  // Handle login
   const handleLogin = () => {
     if (!username || !password) {
       setError('Please fill in all fields.');
       return;
     }
     
-    setLoading(true);  // 开始加载
+    setLoading(true);  // Start loading
     axios.post('http://localhost:4000/api/login', { username, password })
       .then(response => {
         const token = response.data.token;
-        localStorage.setItem('token', token);  // 将 token 存储在 localStorage
-        localStorage.setItem('username', username);  // 存储用户名
-        onLogin();  // 登录成功后的回调
+        localStorage.setItem('token', token);  // Store token in localStorage
+        localStorage.setItem('username', username);  // Store username
+        onLogin();  // Callback after successful login
       })
       .catch((error) => {
         if (error.response && error.response.status === 401) {
-          setError('Invalid username or password');  // 无效登录信息
+          setError('Invalid username or password');  // Invalid login information
         } else {
           setError('An error occurred. Please try again.');
         }
       })
       .finally(() => {
-        setLoading(false);  // 结束加载
+        setLoading(false);  // End loading
       });
   };
 
-  // 处理注册
+  // Handle registration
   const handleRegister = () => {
     if (!username || !password || !email) {
       setError('Please fill in all fields.');
@@ -55,30 +55,30 @@ function Login({ onLogin }) {
       return;
     }
 
-    setLoading(true);  // 开始加载
+    setLoading(true);  // Start loading
     axios.post('http://localhost:4000/api/register', { username, password, email })
       .then(() => {
-        setIsRegistering(false);  // 注册成功后切换回登录页面
-        setError('');  // 清空错误信息
+        setIsRegistering(false);  // Switch back to login page after successful registration
+        setError('');  // Clear error message
       })
       .catch((error) => {
-        console.error('Error response:', error.response);  // 打印错误响应
+        console.error('Error response:', error.response);  // Log error response
 
         if (error.response && error.response.data) {
           const errorMsg = error.response.data.error || 'Registration failed. Please try again.';
 
-          // 检查是否是“用户名或邮箱已存在”的通用错误
+          // Check if it is the "Username or email already exists" error
           if (errorMsg.includes('Username or email already exists')) {
             setError('Username or email already exists.');
           } else {
-            setError(errorMsg);  // 否则，显示后端返回的具体错误
+            setError(errorMsg);  // Otherwise, show the specific error from the backend
           }
         } else {
           setError('An error occurred. Please try again.');
         }
       })
       .finally(() => {
-        setLoading(false);  // 结束加载
+        setLoading(false);  // End loading
       });
   };
 
@@ -120,7 +120,7 @@ function Login({ onLogin }) {
         className="input-field"
       />
 
-      {/* 根据 isRegistering 状态显示注册或登录按钮 */}
+      {/* Show register or login button based on isRegistering state */}
       {isRegistering ? (
         <>
           <button className="btn" onClick={handleRegister} disabled={loading}>
@@ -147,13 +147,14 @@ function Login({ onLogin }) {
         </>
       )}
 
-      {/* 显示错误信息 */}
+      {/* Show error message */}
       {error && <p className="error-message">{error}</p>}
     </div>
   );
 }
 
 export default Login;
+
 
 
 

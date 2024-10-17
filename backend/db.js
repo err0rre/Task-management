@@ -1,14 +1,14 @@
-//
 const { Sequelize } = require('sequelize');
 
-// 创建 Sequelize 实例并连接到 PostgreSQL 数据库!!!!!!将 'task_manager' 替换为你创建的数据库名称，'postgres' 和 'password' 分别是你的数据库用户名和密码。
+// Create a Sequelize instance and connect to the PostgreSQL database
+// Replace 'task_manager' with the name of the database you created, 'tailor' and 'password' are your database username and password.
 const sequelize = new Sequelize('task_manager', 'tailor', 'password', {
   host: 'localhost',
   dialect: 'postgres',
-  logging: console.log  // 确保 SQL 语句被输出到控制台
+  logging: console.log  // Ensure that SQL statements are logged to the console
 });
 
-// 测试数据库连接,确保 Sequelize 能成功连接 PostgreSQL
+// Test the database connection to ensure Sequelize can connect to PostgreSQL successfully
 sequelize.authenticate()
   .then(() => {
     console.log('Connection to PostgreSQL has been established successfully.');
@@ -18,3 +18,4 @@ sequelize.authenticate()
   });
 
 module.exports = sequelize;
+

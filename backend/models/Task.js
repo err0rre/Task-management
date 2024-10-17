@@ -1,35 +1,35 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
-const User = require('./User');  // 导入 User 模型
+const User = require('./User');  // Import the User model
 
-// 定义任务模型
+// Define the Task model
 const Task = sequelize.define('Task', {
   title: {
     type: DataTypes.STRING,
-    allowNull: false,  // 标题不能为空
+    allowNull: false,  // Title cannot be empty
   },
   status: {
     type: DataTypes.STRING,
-    defaultValue: 'pending',  // 默认为 'pending' 状态
+    defaultValue: 'pending',  // Default status is 'pending'
   },
   priority: {
-    type: DataTypes.INTEGER,  // 优先级，1=高, 2=中, 3=低
-    allowNull: true,  // 可以为空
+    type: DataTypes.INTEGER,  // Priority: 1=High, 2=Medium, 3=Low
+    allowNull: true,  // Can be null
   },
   dueDate: {
-    type: DataTypes.DATE,  // 截止日期
-    allowNull: true,  // 可以为空
+    type: DataTypes.DATE,  // Due date
+    allowNull: true,  // Can be null
   },
 }, {
-  timestamps: true,  // 启用 Sequelize 自动时间戳 (createdAt, updatedAt)
+  timestamps: true,  // Enable Sequelize automatic timestamps (createdAt, updatedAt)
 });
 
-// 设置关联关系：任务属于用户
+// Define relationship: Task belongs to a User
 Task.belongsTo(User, { foreignKey: 'userId' });
 User.hasMany(Task, { foreignKey: 'userId' });
 
-// 同步数据库表结构
-Task.sync({ alter: true })  // 使用 alter 模式，不重建表，只修改表结构
+// Sync the database table structure
+Task.sync({ alter: true })  // Use alter mode to update the table structure without recreating it
   .then(() => {
     console.log('Task table updated successfully.');
   })
@@ -38,3 +38,4 @@ Task.sync({ alter: true })  // 使用 alter 模式，不重建表，只修改表
   });
 
 module.exports = Task;
+

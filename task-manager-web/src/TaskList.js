@@ -3,25 +3,25 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function TaskList() {
-  const [tasks, setTasks] = useState([]);  // 任务列表
-  const [newTask, setNewTask] = useState('');  // 新任务标题
-  const [newPriority, setNewPriority] = useState(3);  // 新任务优先级
-  const [newDueDate, setNewDueDate] = useState('');  // 新任务截止日期
-  const [editingTask, setEditingTask] = useState(null);  // 当前正在编辑的任务
-  const [editedTaskTitle, setEditedTaskTitle] = useState('');  // 编辑任务的标题
-  const [editedTaskStatus, setEditedTaskStatus] = useState('pending');  // 编辑任务的状态
-  const [editedTaskPriority, setEditedTaskPriority] = useState(3);  // 编辑任务的优先级
-  const [editedTaskDueDate, setEditedTaskDueDate] = useState('');  // 编辑任务的截止日期
+  const [tasks, setTasks] = useState([]);  // Task list
+  const [newTask, setNewTask] = useState('');  // New task title
+  const [newPriority, setNewPriority] = useState(3);  // New task priority
+  const [newDueDate, setNewDueDate] = useState('');  // New task due date
+  const [editingTask, setEditingTask] = useState(null);  // Currently editing task
+  const [editedTaskTitle, setEditedTaskTitle] = useState('');  // Title of the task being edited
+  const [editedTaskStatus, setEditedTaskStatus] = useState('pending');  // Status of the task being edited
+  const [editedTaskPriority, setEditedTaskPriority] = useState(3);  // Priority of the task being edited
+  const [editedTaskDueDate, setEditedTaskDueDate] = useState('');  // Due date of the task being edited
   const [errorMessage, setErrorMessage] = useState('');  // General error message
 
-  const [error, setError] = useState('');  // 定义用于存储全局错误的状态
-  const [filter, setFilter] = useState('all');  // 用来存储当前的筛选条件
-  const [searchTerm, setSearchTerm] = useState(''); // 存储搜索关键字
+  const [error, setError] = useState('');  // State to store global errors
+  const [filter, setFilter] = useState('all');  // Store the current filter condition
+  const [searchTerm, setSearchTerm] = useState(''); // Store the search keyword
 
-  // 获取 JWT 令牌
+  // Get JWT token
   const token = localStorage.getItem('token');
 
-  // 获取任务列表
+  // Fetch task list
   useEffect(() => {
     if (!token) {
       setError('Please log in to view tasks.');
@@ -30,18 +30,17 @@ function TaskList() {
   
     axios.get('http://localhost:4000/api/tasks', {
       headers: {
-        'Authorization': `Bearer ${token}`  // 在请求头中附带 JWT 令牌
+        'Authorization': `Bearer ${token}`  // Include JWT token in request header
       }
     })
     .then(response => {
-      setTasks(response.data);  // 设置任务列表
+      setTasks(response.data);  // Set task list
     })
     .catch(error => {
       console.error("Error fetching tasks:", error);
       setError('Failed to fetch tasks. Please check if you are logged in.');
     });
   }, [token]);
-
 
   // Validate form input
   const validateForm = () => {
@@ -54,7 +53,7 @@ function TaskList() {
     return true;
   };
 
-  // 创建新任务
+  // Create a new task
   const handleAddTask = () => {
     if (!validateForm()) return;  // If form validation fails, do not proceed
     const token = localStorage.getItem('token');  // Get token
@@ -86,16 +85,16 @@ function TaskList() {
     });
   };
 
-  // 编辑任务
+  // Edit task
   const handleEditTask = (task) => {
-    setEditingTask(task);  // 设置当前编辑的任务
-    setEditedTaskTitle(task.title);  // 设置任务标题到输入框
-    setEditedTaskStatus(task.status);  // 设置任务状态到下拉菜单
-    setEditedTaskPriority(task.priority);  // 设置优先级
-    setEditedTaskDueDate(task.dueDate ? task.dueDate.split('T')[0] : '');  // 设置截止日期
+    setEditingTask(task);  // Set the current task being edited
+    setEditedTaskTitle(task.title);  // Set task title in input field
+    setEditedTaskStatus(task.status);  // Set task status in dropdown
+    setEditedTaskPriority(task.priority);  // Set priority
+    setEditedTaskDueDate(task.dueDate ? task.dueDate.split('T')[0] : '');  // Set due date
   };
 
-  // 提交编辑
+  // Submit edit
   const handleUpdateTask = () => {
     if (editingTask) {
       axios.put(`http://localhost:4000/api/tasks/${editingTask.id}`, {
@@ -112,8 +111,8 @@ function TaskList() {
         const updatedTasks = tasks.map(task =>
           task.id === editingTask.id ? { ...task, ...response.data } : task
         );
-        setTasks(updatedTasks);  // 更新任务列表
-        setEditingTask(null);  // 关闭编辑窗口
+        setTasks(updatedTasks);  // Update task list
+        setEditingTask(null);  // Close edit modal
       })
       .catch(error => {
         console.error('Error updating task:', error);
@@ -122,7 +121,7 @@ function TaskList() {
     }
   };
 
-  // 删除任务
+  // Delete task
   const handleDeleteTask = (id) => {
     axios.delete(`http://localhost:4000/api/tasks/${id}`, {
       headers: {
@@ -131,7 +130,7 @@ function TaskList() {
     })
     .then(() => {
       const remainingTasks = tasks.filter(task => task.id !== id);
-      setTasks(remainingTasks);  // 更新任务列表
+      setTasks(remainingTasks);  // Update task list
     })
     .catch(error => {
       console.error("Error deleting task:", error);
@@ -139,19 +138,14 @@ function TaskList() {
     });
   };
 
-  // 关闭编辑弹窗
+  // Close edit modal
   const handleCloseModal = () => {
-    setEditingTask(null);  // 将当前编辑的任务设为 null，以关闭弹窗
+    setEditingTask(null);  // Set the current editing task to null to close the modal
   };
 
-  // 筛选和搜索的逻辑
+  // Logic for filtering and searching tasks
   const filteredTasks = tasks
     .filter(task => {
-      // if (filter === 'completed') {
-      //   return task.status === 'completed';
-      // } else if (filter === 'pending') {
-      //   return task.status === 'pending';
-      // } else 
       if (filter === 'highPriority') {
         return task.priority === 1;
       } else if (filter === 'mediumPriority') {
@@ -166,23 +160,29 @@ function TaskList() {
       return task.title.toLowerCase().includes(searchTerm.toLowerCase());
     });
 
-  // 将任务按状态分类
-  const pendingTasks = filteredTasks.filter(task => task.status === 'pending');
-  const completedTasks = filteredTasks.filter(task => task.status === 'completed');
+  // Categorize and sort tasks by status and due date
+  const pendingTasks = filteredTasks
+    .filter(task => task.status === 'pending')
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));  // Sort pending tasks by due date (closest first)
 
-  // 动态返回优先级的类名
+  const completedTasks = filteredTasks
+    .filter(task => task.status === 'completed')
+    .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));  // Sort completed tasks by due date (closest first)
+
+  // Dynamically return class names for task priority
   const getPriorityClass = (priority) => {
     switch (priority) {
       case 1:
-        return 'priority-high';  // 高优先级
+        return 'priority-high';  // High priority
       case 2:
-        return 'priority-medium';  // 中优先级
+        return 'priority-medium';  // Medium priority
       case 3:
-        return 'priority-low';  // 低优先级
+        return 'priority-low';  // Low priority
       default:
         return '';
     }
   };
+
 
   return (
     <div className="main-container">
@@ -244,15 +244,11 @@ function TaskList() {
         {errorMessage && <p className="error-message" >{errorMessage}</p>}
       </div>
 
-
-
   
       {/* Filter and search */}
       <div className="filter-container">
         <select onChange={(e) => setFilter(e.target.value)} value={filter}>
           <option value="all">All Tasks</option>
-          {/* <option value="completed">Completed Tasks</option>
-          <option value="pending">Pending Tasks</option> */}
           <option value="highPriority">High Priority</option>
           <option value="mediumPriority">Medium Priority</option>
           <option value="lowPriority">Low Priority</option>
@@ -365,4 +361,3 @@ function TaskList() {
 }
 
 export default TaskList;
-

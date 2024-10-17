@@ -6,7 +6,7 @@ import './App.css';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
-  const username = localStorage.getItem('username');  // 假设登录时存储了用户名
+  const username = localStorage.getItem('username'); 
 
   const handleLogin = () => {
     setIsLoggedIn(true);

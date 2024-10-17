@@ -1,19 +1,19 @@
 //middlewares/auth.js
 const jwt = require('jsonwebtoken');
 
-// JWT 验证中间件
+// JWT authentication middleware
 function authenticateToken(req, res, next) {
-  // 获取 Authorization 头并解析 Bearer token
+  // Retrieve Authorization header and extract the Bearer token
   const authHeader = req.header('Authorization');
-  const token = authHeader && authHeader.split(' ')[1];  // Bearer token 格式
+  const token = authHeader && authHeader.split(' ')[1];  // Bearer token format
   
   if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
 
   try {
-    // 使用环境变量中的 JWT 密钥解码 token
-    const verified = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');  // 使用环境变量存储密钥
-    req.user = verified;  // 将解码后的用户信息存储在请求对象中
-    next();  // 继续执行后续中间件或路由处理程序
+    // Decode the token using the JWT secret from the environment variables
+    const verified = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');  // Use environment variables to store the secret
+    req.user = verified;  // Store the decoded user information in the request object
+    next();  // Proceed to the next middleware or route handler
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token expired' });
@@ -26,3 +26,4 @@ function authenticateToken(req, res, next) {
 }
 
 module.exports = authenticateToken;
+
