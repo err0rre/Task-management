@@ -11,7 +11,7 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,  // 数据库主机，在 docker-compose 中是 "db"
     dialect: 'postgres',
-    port: process.env.DB_PORT,   // 数据库端口
+    port: parseInt(process.env.DB_PORT, 10),   // 数据库端口
     logging: console.log
   }
 );
