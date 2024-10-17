@@ -17,6 +17,19 @@ spec:
         image: postgres:13
         ports:
         - containerPort: 5432
+        livenessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 10
+          periodSeconds: 10
+
+        readinessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+
         env:
         - name: POSTGRES_DB
           value: "task_manager"

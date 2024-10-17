@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import TaskList from './TaskList';
 import Login from './Login';
 import './App.css';
+import { healthCheck, readyCheck } from './health';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
@@ -43,6 +44,9 @@ function App() {
     </div>
   );
 }
+
+export { healthCheck, readyCheck };
+
 
 export default App;
 

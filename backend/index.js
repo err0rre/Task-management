@@ -4,7 +4,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-// const bcrypt = require('bcryptjs');
+
 const Task = require('./models/Task');  // Import the Task model
 const User = require('./models/User');  // Import the User model
 
@@ -19,6 +19,29 @@ const SECRET_KEY = process.env.SECRET_KEY;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+/// 健康检查端点
+app.get('/health', (req, res) => {
+  res.status(200).send('OK'); // 服务器正常运行
+});
+
+// 就绪检查端点
+app.get('/ready', async (req, res) => {
+  try {
+    await sequelize.authenticate(); // 确保数据库连接正常
+    res.status(200).send('Ready');
+  } catch (error) {
+    res.status(500).send('Database not ready');
+  }
+});
+
+// 其他路由和中间件
+
+app.listen(4000, () => {
+  console.log('Backend server running on port 4000');
+});
+
+
 
 // Get all users
 app.get('/api/users', async (req, res) => {
