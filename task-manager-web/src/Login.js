@@ -11,6 +11,11 @@ function Login({ onLogin }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);  // 添加加载状态
 
+  // Helper function to validate email format
+  const isValidEmail = (email) => {
+    return email.includes('@');  // 仅检查是否包含 @ 符号
+  };
+
   // 处理登录
   const handleLogin = () => {
     if (!username || !password) {
@@ -26,8 +31,12 @@ function Login({ onLogin }) {
         localStorage.setItem('username', username);  // 存储用户名
         onLogin();  // 登录成功后的回调
       })
-      .catch(() => {
-        setError('Invalid username or password');
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+          setError('Invalid username or password');  // 无效登录信息
+        } else {
+          setError('An error occurred. Please try again.');
+        }
       })
       .finally(() => {
         setLoading(false);  // 结束加载
@@ -41,14 +50,32 @@ function Login({ onLogin }) {
       return;
     }
 
+    if (!isValidEmail(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+
     setLoading(true);  // 开始加载
     axios.post('http://localhost:4000/api/register', { username, password, email })
       .then(() => {
         setIsRegistering(false);  // 注册成功后切换回登录页面
         setError('');  // 清空错误信息
       })
-      .catch(() => {
-        setError('Registration failed. Please try again.');
+      .catch((error) => {
+        console.error('Error response:', error.response);  // 打印错误响应
+
+        if (error.response && error.response.data) {
+          const errorMsg = error.response.data.error || 'Registration failed. Please try again.';
+
+          // 检查是否是“用户名或邮箱已存在”的通用错误
+          if (errorMsg.includes('Username or email already exists')) {
+            setError('Username or email already exists.');
+          } else {
+            setError(errorMsg);  // 否则，显示后端返回的具体错误
+          }
+        } else {
+          setError('An error occurred. Please try again.');
+        }
       })
       .finally(() => {
         setLoading(false);  // 结束加载
@@ -63,7 +90,10 @@ function Login({ onLogin }) {
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setError('');  // Clear error when typing
+          }}
           placeholder="Email"
           className="input-field"
         />
@@ -72,14 +102,20 @@ function Login({ onLogin }) {
       <input
         type="text"
         value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        onChange={(e) => {
+          setUsername(e.target.value);
+          setError('');  // Clear error when typing
+        }}
         placeholder="Username"
         className="input-field"
       />
       <input
         type="password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) => {
+          setPassword(e.target.value);
+          setError('');  // Clear error when typing
+        }}
         placeholder="Password"
         className="input-field"
       />
@@ -118,5 +154,9 @@ function Login({ onLogin }) {
 }
 
 export default Login;
+
+
+
+
 
 

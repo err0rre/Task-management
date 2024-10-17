@@ -12,7 +12,9 @@ function TaskList() {
   const [editedTaskStatus, setEditedTaskStatus] = useState('pending');  // 编辑任务的状态
   const [editedTaskPriority, setEditedTaskPriority] = useState(3);  // 编辑任务的优先级
   const [editedTaskDueDate, setEditedTaskDueDate] = useState('');  // 编辑任务的截止日期
-  const [error, setError] = useState('');  // 错误状态
+  const [errorMessage, setErrorMessage] = useState('');  // General error message
+
+  const [error, setError] = useState('');  // 定义用于存储全局错误的状态
   const [filter, setFilter] = useState('all');  // 用来存储当前的筛选条件
   const [searchTerm, setSearchTerm] = useState(''); // 存储搜索关键字
 
@@ -40,8 +42,23 @@ function TaskList() {
     });
   }, [token]);
 
+
+  // Validate form input
+  const validateForm = () => {
+    if (!newTask || !newPriority || !newDueDate) {
+      // Ensure errorMessage is a string, not an object
+      setErrorMessage('Please fill in all required fields.');
+      return false;
+    }
+    setErrorMessage('');  // Clear error if all fields are filled
+    return true;
+  };
+
   // 创建新任务
   const handleAddTask = () => {
+    if (!validateForm()) return;  // If form validation fails, do not proceed
+    const token = localStorage.getItem('token');  // Get token
+
     if (!token) {
       setError('Please log in to add tasks.');
       return;
@@ -57,14 +74,15 @@ function TaskList() {
       }
     })
     .then(response => {
-      setTasks([...tasks, response.data]);  // 更新任务列表
-      setNewTask('');  // 清空表单
-      setNewPriority(3);
+      setTasks([...tasks, response.data]);  // Update task list
+      setNewTask('');  // Clear form
+      setNewPriority('');
       setNewDueDate('');
+      setErrorMessage('');  // Clear error message after successful creation
     })
     .catch(error => {
       console.error("Error adding task:", error);
-      setError('Failed to add task. Make sure all fields are filled.');
+      setErrorMessage('Failed to add task. Make sure all fields are filled.');
     });
   };
 
@@ -129,11 +147,12 @@ function TaskList() {
   // 筛选和搜索的逻辑
   const filteredTasks = tasks
     .filter(task => {
-      if (filter === 'completed') {
-        return task.status === 'completed';
-      } else if (filter === 'pending') {
-        return task.status === 'pending';
-      } else if (filter === 'highPriority') {
+      // if (filter === 'completed') {
+      //   return task.status === 'completed';
+      // } else if (filter === 'pending') {
+      //   return task.status === 'pending';
+      // } else 
+      if (filter === 'highPriority') {
         return task.priority === 1;
       } else if (filter === 'mediumPriority') {
         return task.priority === 2;
@@ -167,7 +186,6 @@ function TaskList() {
 
   return (
     <div className="main-container">
-      {/* Create new task */}
       <div className="create-task">
         <h3>Create a New Task</h3>
         <form className="create-task-form">
@@ -177,17 +195,24 @@ function TaskList() {
               id="new-task-title"
               type="text"
               value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
+              onChange={(e) => {
+                setNewTask(e.target.value);
+                setErrorMessage('');  // Clear error when typing
+              }}
               placeholder="e.g., Buy groceries"
               required
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="new-task-priority">Priority</label>
             <select
               id="new-task-priority"
               value={newPriority}
-              onChange={(e) => setNewPriority(Number(e.target.value))}
+              onChange={(e) => {
+                setNewPriority(Number(e.target.value));
+                setErrorMessage('');  // Clear error when selecting
+              }}
               required
             >
               <option value="" disabled>Select priority</option>
@@ -196,27 +221,38 @@ function TaskList() {
               <option value={3}>Low</option>
             </select>
           </div>
+
           <div className="form-group">
             <label htmlFor="new-task-due-date">Due Date</label>
             <input
               id="new-task-due-date"
               type="date"
               value={newDueDate}
-              onChange={(e) => setNewDueDate(e.target.value)}
+              onChange={(e) => {
+                setNewDueDate(e.target.value);
+                setErrorMessage('');  // Clear error when selecting date
+              }}
               min={new Date().toISOString().split('T')[0]}
               required
             />
           </div>
+
           <button type="button" onClick={handleAddTask}>Create</button>
         </form>
+
+        {/* Display general error message below the form */}
+        {errorMessage && <p className="error-message" >{errorMessage}</p>}
       </div>
+
+
+
   
       {/* Filter and search */}
       <div className="filter-container">
         <select onChange={(e) => setFilter(e.target.value)} value={filter}>
           <option value="all">All Tasks</option>
-          <option value="completed">Completed Tasks</option>
-          <option value="pending">Pending Tasks</option>
+          {/* <option value="completed">Completed Tasks</option>
+          <option value="pending">Pending Tasks</option> */}
           <option value="highPriority">High Priority</option>
           <option value="mediumPriority">Medium Priority</option>
           <option value="lowPriority">Low Priority</option>
@@ -237,6 +273,7 @@ function TaskList() {
           <li key={task.id} className={`task-item ${getPriorityClass(task.priority)}`}>
             <div className="task-info">
               <span className="task-title">{task.title}</span>
+              <span className="task-date">{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No due date'}</span>
             </div>
             <div className="task-buttons">
               <button onClick={() => handleEditTask(task)}>Edit</button>
@@ -251,7 +288,10 @@ function TaskList() {
       <ul className="task-list completed">
         {completedTasks.map(task => (
           <li key={task.id} className={`task-item ${getPriorityClass(task.priority)}`}>
-            <div className="task-title">{task.title}</div>
+            <div className="task-info">
+              <span className="task-title">{task.title}</span>
+              <span className="task-date">{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No due date'}</span>
+            </div>
             <div className="task-buttons">
               <button onClick={() => handleEditTask(task)}>Edit</button>
               <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
@@ -259,6 +299,8 @@ function TaskList() {
           </li>
         ))}
       </ul>
+
+
 
   
       {/* Modal for editing task */}

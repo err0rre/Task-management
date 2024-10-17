@@ -49,32 +49,33 @@ app.get('/api/users/:id', async (req, res) => {
 // 用户注册 API
 app.post('/api/register', async (req, res) => {
   const { username, password, email } = req.body;
-  // console.log('Registering user:', username);
-  
+
+  // 检查是否有字段为空
+  if (!username || !password || !email) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
   try {
-    // 检查是否已有用户
+    // 检查用户名或邮箱是否已存在
     const existingUser = await User.findOne({ where: { username } });
-    if (existingUser) {
-      return res.status(400).json({ error: 'Username already exists' });
+    const existingEmail = await User.findOne({ where: { email } });
+
+    // 如果用户名或邮箱已存在，返回通用错误信息
+    if (existingUser || existingEmail) {
+      return res.status(400).json({ error: 'Username or email already exists' });
     }
 
-    // 密码加密
-    // const salt = await bcrypt.genSalt(10);
-    // const hashedPassword = await bcrypt.hash(password, salt);
-    // console.log('Hashed password:', hashedPassword);
-
-    // 创建用户
-    // const user = await User.create({ username, password: hashedPassword, email });
-
-    // 直接存储用户输入的密码，不再进行加密
+    // 创建新用户
     const user = await User.create({ username, password, email });
 
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
-    // console.error('Error registering user:', error.message);
+    console.error('Error registering user:', error.message);
     res.status(500).json({ error: 'Error registering user' });
   }
 });
+
+
 
 
 // 用户登录

@@ -1,26 +1,64 @@
 /* 全局样式 */
+:root {
+  --primary-font: 'DM Sans', sans-serif;
+  --secondary-font: 'Dosis', sans-serif;
+
+
+  --header-color: #53616c; /* 深蓝灰头部颜色 */
+  --primary-color: #3a4f5a; /* 主按钮颜色 */
+  --primary-hover-color: #778891; /* 主按钮悬停颜色 */
+  --secondary-color: #b0b8bd; /* 次按钮颜色 */
+  --secondary-hover-color: #969fa4; /* 次按钮悬停效果 */
+  --danger-color: #977070; /* 柔和的玫瑰棕，高优先级 */
+  --warning-color: #bb9d82; /* 柔和的沙滩米色，中等优先级 */
+  --success-color: #7d9d83; /* 柔和的浅蓝绿色，低优先级 */
+  --success-hover-color: #5c737f;
+  --logout-color: #a49ba1; /* 柔和的烟灰紫，登出按钮 */
+  --logout-hover-color: #867b82; /* 烟灰紫的深色悬停效果 */
+  --background-color: #ebeff1; /* 淡淡的蓝灰背景 */
+  --task-bg-color: #f5f6f7; /* 米白中带灰的任务背景 */
+  --border-color: #ccd4d8; /* 蓝灰调的边框 */
+  --box-shadow-color: rgba(0, 0, 0, 0.05); /* 轻微阴影效果 */
+  --text-color: #f8fbff; /* 浅色文字 */
+  
+  --hover-bg-color: #f0f8ff; /* 列表项悬停背景色 */
+  --modal-bg-color: rgba(0, 0, 0, 0.5); /* 模态框的背景遮罩颜色 */
+  --button-bg-white: #e3e7ef; /* 按钮默认背景 */
+  --button-hover-text: #ffffff; /* 按钮悬停时的文字颜色 */
+}
+
+/* 全局应用字体 */
+body {
+  font-family: var(--primary-font); /* 全局默认使用 DM Sans */
+}
+
+
+
+
+
+
+/* 页面结构和布局 */
 .App {
   text-align: center;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f7f9fc; /* 页面背景色 */
+  background-color: var(--background-color);
   padding: 20px;
 }
 
-/* Header 样式 */
 .App-header {
-  background-color: #282c34;
+  background-color: var(--header-color);
   width: 100%;
   padding: 20px;
-  color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: var(--text-color);
+  box-shadow: 0 4px 8px var(--box-shadow-color);
   margin-bottom: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;  /* 使右上角的用户名和按钮定位 */
+  position: relative;
 }
 
 .header-content {
@@ -28,7 +66,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1200px;  /* 限制最大宽度 */
+  max-width: 1200px;
 }
 
 .app-title {
@@ -46,13 +84,13 @@
 
 .username {
   font-size: 18px;
-  color: #ffffff;
+  color: var(--text-color);
 }
 
 .logout-button {
   padding: 10px 20px;
-  background-color: #ff6666;
-  color: white;
+  background-color: var(--logout-color);
+  color: var(--text-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -60,31 +98,18 @@
 }
 
 .logout-button:hover {
-  background-color: #ff4d4d;
+  background-color: var(--logout-hover-color);
 }
 
-
-
-:root {
-  --high-priority-color: #dc3545;
-  --medium-priority-color: #ffc107;
-  --low-priority-color: #28a745;
-  --button-bg-color: #d4e5f1;
-  --button-border-color: #007bff;
-  --button-text-color: #007bff;
-}
-
-/* 主容器 */
+/* 任务创建样式 */
 .main-container {
   display: flex;
   flex-direction: column;
   width: 80vw;
-  margin: 0 auto; /* 居中 */
+  margin: 0 auto;
   padding: 20px;
-  
 }
 
-/* 表单样式 */
 .create-task {
   margin-bottom: 30px;
 }
@@ -110,27 +135,28 @@
   width: 15vw;
 }
 
-
 .create-task-form input,
 .create-task-form select {
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
   font-size: 16px;
 }
 
 .create-task-form button {
-  padding: 10px 20px;
-  background-color: #28a745;
-  color: white;
+  padding: 1vh 2vh;
+  background-color: var(--success-color);
+  color: var(--text-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: var(--background-color) 0.3s;
+  font-size: 2.5vh;
 }
 
+
 .create-task-form button:hover {
-  background-color: #218838;
+  background-color: var(--success-hover-color);
 }
 
 /* 筛选容器 */
@@ -147,93 +173,10 @@
   padding: 10px;
   font-size: 16px;
   border-radius: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
 }
 
-
-/* 列表项悬停效果 */
-.task-list li:hover {
-  background-color: #f0f8ff;
-}
-
-
-
-
-
-/* li 的优先级颜色条 */
-.task-item.priority-high {
-  border-left: 10px solid var(--high-priority-color); /* 使用预设的高优先级颜色 */
-}
-
-.task-item.priority-medium {
-  border-left: 10px solid var(--medium-priority-color); /* 使用预设的中优先级颜色 */
-}
-
-.task-item.priority-low {
-  border-left: 10px solid var(--low-priority-color); /* 使用预设的低优先级颜色 */
-}
-
-
-
-/* li 的优先级颜色条 */
-.priority-high {
-  border-left: 10px solid var(--high-priority-color); /* 边框颜色条 */
-}
-
-.priority-medium {
-  border-left: 10px solid var(--medium-priority-color); /* 边框颜色条 */
-}
-
-.priority-low {
-  border-left: 10px solid var(--low-priority-color); /* 边框颜色条 */
-}
-
-/* 任务项布局 */
-.task-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-.task-item:hover {
-  background-color: #f0f8ff;
-}
-
-.task-title {
-  flex-grow: 1;
-  margin-left: 10px;
-}
-
-.task-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-/* 按钮样式 */
-li button {
-  padding: 5px 10px;
-  border: 1px solid var(--button-border-color);
-  background-color: white;
-  color: var(--button-text-color);
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-li button:hover {
-  background-color: var(--button-border-color);
-  color: white;
-}
-
-
-
-
-/* 任务列表样式 */
+/* 列表样式 */
 .task-list {
   list-style-type: none;
   padding: 0;
@@ -245,104 +188,141 @@ li button:hover {
   justify-content: space-between;
   padding: 10px;
   margin-bottom: 10px;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  background-color: var(--task-bg-color);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
 }
 
-
-
-
-.task-buttons button:hover {
-  background-color: var(--button-border-color);
-  color: white;
+.task-item.priority-high {
+  border-left: 10px solid var(--danger-color); /* 高优先级颜色 */
 }
+
+.task-item.priority-medium {
+  border-left: 10px solid var(--warning-color); /* 中等优先级颜色 */
+}
+
+.task-item.priority-low {
+  border-left: 10px solid var(--success-color); /* 低优先级颜色 */
+}
+
+.task-item:hover {
+  background-color: var(--hover-bg-color);
+}
+
+.task-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.task-title {
+  flex-grow: 1;
+  margin-left: 10px;
+}
+
+.task-date {
+  margin-right: 20px; /* Creates space between the date and buttons */
+  color: #6c757d; /* Subtle color for the date */
+  font-size: 1.6vh; /* Adjust font size */
+}
+
+.task-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.error-message {
+  color: var(--danger-color);
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+
+
+
+
+
+/* 按钮样式 */
+li button {
+  padding: 5px 10px;
+  border: 1px solid var(--border-color);
+  background-color: var(--button-bg-white);
+  color: var(--primary-color);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 2vh;
+}
+
+li button:hover {
+  background-color: var(--primary-color);
+  color: var(--button-hover-text);
+}
+
 
 /* 已完成任务的透明度 */
 .completed li {
   opacity: 0.7;
 }
 
-
-
-
-h3 {
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 5px;
-  margin-bottom: 15px;
-}
-
-
-
-
-
-
-/* 弹窗的背景遮罩层 */
+/* 模态框样式 */
 .modal {
-  position: fixed; /* 固定定位，使其相对于视口定位 */
-  z-index: 1000; /* 确保弹窗位于其他元素之上 */
+  position: fixed;
+  z-index: 1000;
   left: 0;
   top: 0;
-  width: 100%; /* 占满整个视口宽度 */
-  height: 100%; /* 占满整个视口高度 */
-  overflow: auto; /* 如果内容超出视口，允许滚动 */
-  background-color: rgba(0, 0, 0, 0.5); /* 半透明的黑色背景 */
+  width: 100%;
+  height: 100%;
+  background-color: var(--modal-bg-color);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* 弹窗内容区域 */
 .modal-content {
-  background-color: #fefefe;
+  background-color: var(--task-bg-color);
   padding: 20px 30px;
   border-radius: 10px;
   width: 400px;
   max-width: 90%;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 15px var(--box-shadow-color);
 }
 
-/* 弹窗表单样式 */
 .modal-form {
   display: flex;
   flex-direction: column;
 }
 
-/* 表单组样式 */
 .form-group {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
 }
 
-/* 表单标签样式 */
 .form-group label {
   margin-bottom: 5px;
   font-weight: bold;
 }
 
-/* 输入字段和选择框样式 */
 .form-group input,
 .form-group select {
   padding: 8px;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 5px;
 }
 
-/* 弹窗按钮容器 */
 .modal-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
 
-/* 弹窗按钮样式 */
 .modal-buttons button {
   padding: 8px 16px;
   font-size: 1rem;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -350,49 +330,42 @@ h3 {
 }
 
 .modal-buttons button:hover {
-  background-color: #0056b3;
+  background-color: var(--primary-hover-color);
 }
 
-/* 取消按钮的特殊样式 */
 .modal-buttons button:nth-child(2) {
-  background-color: #6c757d;
+  background-color: var(--secondary-color);
 }
 
 .modal-buttons button:nth-child(2):hover {
-  background-color: #5a6268;
+  background-color: var(--secondary-hover-color);
 }
 
-
-
-
-/* --------- Login ------------------------*/
-/* 登录页面容器样式 */
+/* 登录页面样式 */
 .login-container {
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: var(--task-bg-color);
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px var(--box-shadow-color);
   text-align: center;
 }
 
-/* 输入框样式 */
 .input-field {
-  width: 100%;
+  width: 90%;
   padding: 10px;
   margin: 10px 0;
   border-radius: 5px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   font-size: 16px;
 }
 
-/* 按钮样式 */
 .btn {
-  width: 100%;
+  width: 90%;
   padding: 10px;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-color);
   border: none;
   border-radius: 5px;
   font-size: 16px;
@@ -401,12 +374,12 @@ h3 {
 }
 
 .btn:hover {
-  background-color: #0056b3;
+  background-color: var(--primary-hover-color);
 }
 
 .toggle-btn {
   background: none;
-  color: #007bff;
+  color: var(--primary-color);
   border: none;
   cursor: pointer;
   font-size: 14px;
@@ -416,75 +389,10 @@ h3 {
   text-decoration: underline;
 }
 
-/* 错误信息样式 */
 .error-message {
-  color: red;
+  color: var(--danger-color);
   margin-top: 20px;
   font-weight: bold;
-}
-
-
-/* create new task */
-/* 表单行，横向排列输入字段 */
-.form-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 20px;
-}
-
-/* 表单组 */
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-/* 标题组，设置较宽的宽度 */
-.title-group {
-  flex: 4; /* 占据双倍空间 */
-  min-width: 240px;
-}
-
-/* 小型输入组 */
-.small-group {
-  flex: 1; /* 占据标准空间 */
-  min-width: 100px;
-}
-
-/* 按钮组 */
-.button-group {
-  flex: 0; /* 仅占自身内容的空间 */
-}
-
-/* 标签样式 */
-.form-group label {
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-/* 输入框和选择框样式 */
-.form-group input,
-.form-group select {
-  padding: 8px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* 创建按钮样式 */
-.button-group button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  background-color: #28a745; /* 绿色 */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.button-group button:hover {
-  background-color: #218838;
 }
 
 /* 响应式调整 */
