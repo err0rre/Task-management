@@ -11,7 +11,10 @@ const User = require('./models/User');  // Import the User model
 const sequelize = require('./db');  // Import the Sequelize instance
 
 const app = express();
-const SECRET_KEY = 'my_jwt_secret_key';  // Secret key for signing JWTs
+const PORT = process.env.PORT || 4000;
+const SECRET_KEY = process.env.SECRET_KEY;
+
+// const SECRET_KEY = 'my_jwt_secret_key';  // Secret key for signing JWTs
 
 // Middleware
 app.use(cors());

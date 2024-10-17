@@ -1,0 +1,30 @@
+version: '3'
+services:
+  frontend:
+    build: ./task-manager-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+
+  backend:
+    build: ./backend
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13  # 使用 PostgreSQL 镜像
+    environment:
+      POSTGRES_USER: tailor  # 对应 db.js 中的用户名
+      POSTGRES_PASSWORD: password  # 对应 db.js 中的密码
+      POSTGRES_DB: task_manager  # 对应 db.js 中的数据库名称
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # 数据持久化
+
+volumes:
+  postgres_data:  # 修改为 postgres_data 而不是 mysql_data
+

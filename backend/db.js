@@ -1,3 +1,4 @@
+//backend/db.js
 const { Sequelize } = require('sequelize');
 
 // Create a Sequelize instance and connect to the PostgreSQL database
